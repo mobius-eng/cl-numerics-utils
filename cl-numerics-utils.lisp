@@ -1,5 +1,48 @@
 (in-package cl-numerics-utils)
 ;; * Common utils for numerical methods
+;; ** Infinities
+
+(defgeneric plus-infinite-p (number))
+(defgeneric minus-infinite-p (number))
+
+(defmethod plus-infinite-p ((number number)) nil)
+(defmethod minus-infinite-p ((number number)) nil)
+
+
+(defmethod plus-infinite-p ((number double-float))
+  (> number most-positive-double-float))
+
+(defmethod minus-infinite-p ((number double-float))
+  (< number most-negative-double-float))
+
+
+(defmethod plus-infinite-p ((number single-float))
+  (> number most-positive-single-float))
+
+(defmethod minus-infinite-p ((number single-float))
+  (< number most-negative-single-float))
+
+
+(defconstant +double-float-plus-infinity+
+  #+sbcl sb-ext:double-float-positive-infinity
+  #+ccl 1d++0
+  #+ecl ext:double-float-positive-infinity)
+
+(defconstant +double-float-minus-infinity+
+  #+sbcl sb-ext:double-float-negative-infinity
+  #+ccl -1d++0
+  #+ecl ext:double-float-negative-infinity)
+
+(defconstant +single-float-plus-infinity+
+  #+sbcl sb-ext:single-float-positive-infinity
+  #+ccl 1e++0
+  #+ecl ext:single-float-positive-infinity)
+
+(defconstant +single-float-negative-infinity+
+  #+sbcl sb-ext:single-float-negative-infinity
+  #+ccl -1e++0
+  #+ecl ext:single-float-negative-infinity)
+
 
 ;; ** Generalized equality: borrowed from CL-NUM-UTILS
 (defgeneric num= (x y &optional tolerance)
